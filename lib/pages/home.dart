@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_task10/sql_helper.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage ({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -15,7 +16,12 @@ class _HomePageState extends State<HomePage> {
         title: Text('Home Page'),
       ),
       body: Center(
-        child: Text('Hello World!'),
+        child: FloatingActionButton(
+          onPressed: () {
+            var sqlHelper = SqlHelper();
+            // sqlHelper.db.
+          },
+        ),
       ),
     );
   }

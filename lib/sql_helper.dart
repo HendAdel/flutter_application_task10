@@ -1,21 +1,34 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 class SqlHelper {
-  static final SqlHelper instance = SqlHelper._internal();
-  static Database? _database;
-  SqlHelper._internal();
-  Future<Database> get database async{
-    if (_database != null){
-      return _database!;
-    }
-    _database = await _initDatabase();
-    return _database!;
+  Database? db;
+  SqlHelper() {
+    initDatabase();
   }
-  Future<Database> _initDatabase() async {
-    final databasePath = await getDatabasesPath();
-    final path = '$databasePath/mydatabase.db';
-    return await openDatabase(path, version: 1, onCreate: (db, version){
-      print("=============================== Db Created");
-    });
+
+  // Create database on the web or phone.
+  void initDatabase() async {
+    try {
+      if (kIsWeb) {
+        // Use the ffi web factory in web apps (flutter or dart)
+        var factory = databaseFactoryFfiWeb;
+        db = await factory.openDatabase('task10.db');
+        // var sqliteVersion =
+        //     (await db.rawQuery('select sqlite_version()')).first.values.first;
+        print(db.hashCode);
+        // print(sqliteVersion); // should print 3.39.3
+      } else {
+        db = await openDatabase('task10.db', version: 1,
+            onCreate: (db, version) {
+          print("=============================== Db Created");
+        });
+      }
+    } catch (e) {
+      print("Error in Creating the database : ${e}");
+    }
   }
 }
