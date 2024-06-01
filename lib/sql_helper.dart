@@ -10,6 +10,20 @@ class SqlHelper {
     initDatabase();
   }
 
+  //Create database tables
+  Future<void> CreateTables() async{
+    try{
+      await db!.execute("""Create table if not exists employee(
+        id integer primary key,
+        name text,
+        email text,
+        phoneNumber text
+      )""");
+    }
+    catch(e){
+      print("Error in creating Employee tabe: ${e}");
+    }
+  }
   // Create database on the web or phone.
   void initDatabase() async {
     try {
